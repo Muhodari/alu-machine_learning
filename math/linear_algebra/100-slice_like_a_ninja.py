@@ -8,4 +8,3 @@ def np_slice(matrix, axes={}):
     for axis, s in axes.items():
         slicer[axis] = slice(*s)
     return matrix[tuple(slicer)]
-
