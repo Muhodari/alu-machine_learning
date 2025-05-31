@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
+"""Module that provides a function to calculate the determinant of a matrix."""
 
 def determinant(matrix):
-    if not isinstance(matrix, list) or not all(isinstance(row, list) for row in matrix):
+    if not isinstance(matrix, list) or not all(
+        isinstance(row, list) for row in matrix
+    ):
         raise TypeError("matrix must be a list of lists")
     if matrix == [[]]:
         return 1
@@ -11,13 +14,16 @@ def determinant(matrix):
     if size == 1:
         return matrix[0][0]
     if size == 2:
-        return matrix[0][0]*matrix[1][1] - matrix[0][1]*matrix[1][0]
+        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
     det = 0
     for col in range(size):
-        minor = [
-            [matrix[i][j] for j in range(size) if j != col]
-            for i in range(1, size)
-        ]
+        minor = []
+        for i in range(1, size):
+            row = []
+            for j in range(size):
+                if j != col:
+                    row.append(matrix[i][j])
+            minor.append(row)
         sign = (-1) ** col
         det += sign * matrix[0][col] * determinant(minor)
     return det
