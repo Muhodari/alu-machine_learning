@@ -14,7 +14,7 @@ def definiteness(matrix):
         matrix (np.ndarray): square matrix whose definiteness is to be determined
 
     Returns:
-        str or None: one of 'Positive definite', 'Positive semi-definite',
+        str or None: 'Positive definite', 'Positive semi-definite',
                      'Negative definite', 'Negative semi-definite',
                      'Indefinite', or None
     """
@@ -22,9 +22,9 @@ def definiteness(matrix):
         raise TypeError("matrix must be a numpy.ndarray")
 
     if (
-        matrix.ndim != 2 or
-        matrix.shape[0] != matrix.shape[1] or
-        matrix.size == 0
+        matrix.ndim != 2
+        or matrix.shape[0] != matrix.shape[1]
+        or matrix.size == 0
     ):
         return None
 
