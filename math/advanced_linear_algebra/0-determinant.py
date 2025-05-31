@@ -1,7 +1,20 @@
 #!/usr/bin/env python3
 """Module that provides a function to calculate the determinant of a matrix."""
 
+
 def determinant(matrix):
+    """Calculate the determinant of a square matrix.
+
+    Args:
+        matrix (list of lists): A square matrix.
+
+    Raises:
+        TypeError: If matrix is not a list of lists.
+        ValueError: If matrix is not a square matrix.
+
+    Returns:
+        int: The determinant of the matrix.
+    """
     if not isinstance(matrix, list) or not all(
         isinstance(row, list) for row in matrix
     ):
