@@ -11,13 +11,13 @@ def definiteness(matrix):
     Determines the definiteness of a square symmetric matrix.
 
     Args:
-        matrix (np.ndarray): square matrix whose definiteness is to be determined
+        matrix (np.ndarray): square matrix whose definiteness is to be
+                             determined
 
     Returns:
-        str or None:
-            'Positive definite', 'Positive semi-definite',
-            'Negative definite', 'Negative semi-definite',
-            'Indefinite', or None
+        str or None: 'Positive definite', 'Positive semi-definite',
+                     'Negative definite', 'Negative semi-definite',
+                     'Indefinite', or None
     """
     if not isinstance(matrix, np.ndarray):
         raise TypeError("matrix must be a numpy.ndarray")
