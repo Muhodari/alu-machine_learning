@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""This module defines a function that calculates the definiteness of a matrix."""
+"""
+This module defines a function that calculates the definiteness of a matrix.
+"""
 
 import numpy as np
 
