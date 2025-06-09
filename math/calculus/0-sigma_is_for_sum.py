@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-This script computes the summation of integers from i=2 to i=5.
+This script computes  the summation of integers from i=2 to i=5.
 """
 
 def summation(start, end):
