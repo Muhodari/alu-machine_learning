@@ -10,18 +10,6 @@ class Normal:
     """
 
     def __init__(self, data=None, mean=0., stddev=1.):
-        """
-        Initializes the normal distribution
-
-        Args:
-            data (list): data to estimate the distribution
-            mean (float): mean of the distribution
-            stddev (float): standard deviation of the distribution
-
-        Raises:
-            TypeError: if data is not a list
-            ValueError: if stddev is not positive or data has < 2 values
-        """
         if data is None:
             if stddev <= 0:
                 raise ValueError("stddev must be a positive value")
@@ -37,29 +25,31 @@ class Normal:
             self.stddev = variance ** 0.5
 
     def z_score(self, x):
-        """
-        Calculates the z-score of a given x-value
-        """
         return (x - self.mean) / self.stddev
 
     def x_value(self, z):
-        """
-        Calculates the x-value of a given z-score
-        """
         return self.mean + z * self.stddev
 
     def pdf(self, x):
-        """
-        Calculates the value of the PDF for a given x-value
-
-        Args:
-            x (float): x-value
-
-        Returns:
-            float: PDF value at x
-        """
         e = 2.7182818285
         pi = 3.1415926536
         part1 = 1 / (self.stddev * (2 * pi) ** 0.5)
         exponent = -0.5 * ((x - self.mean) / self.stddev) ** 2
         return part1 * (e ** exponent)
+
+    def cdf(self, x):
+        """
+        Calculates the value of the CDF for a given x-value
+
+        Args:
+            x (float): x-value
+
+        Returns:
+            float: CDF value at x
+        """
+        pi = 3.1415926536
+        z = (x - self.mean) / (self.stddev * (2 ** 0.5))
+        # Error function approximation
+        erf = (2 / (pi ** 0.5)) * (z - (z ** 3) / 3 + (z ** 5) / 10 -
+                                   (z ** 7) / 42 + (z ** 9) / 216)
+        return 0.5 * (1 + erf)
