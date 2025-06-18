@@ -39,23 +39,27 @@ class Normal:
     def z_score(self, x):
         """
         Calculates the z-score of a given x-value
-
-        Args:
-            x (float): x-value
-
-        Returns:
-            float: z-score of x
         """
         return (x - self.mean) / self.stddev
 
     def x_value(self, z):
         """
         Calculates the x-value of a given z-score
-
-        Args:
-            z (float): z-score
-
-        Returns:
-            float: x-value corresponding to z
         """
         return self.mean + z * self.stddev
+
+    def pdf(self, x):
+        """
+        Calculates the value of the PDF for a given x-value
+
+        Args:
+            x (float): x-value
+
+        Returns:
+            float: PDF value at x
+        """
+        e = 2.7182818285
+        pi = 3.1415926536
+        part1 = 1 / (self.stddev * (2 * pi) ** 0.5)
+        exponent = -0.5 * ((x - self.mean) / self.stddev) ** 2
+        return part1 * (e ** exponent)
