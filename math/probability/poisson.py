@@ -58,3 +58,30 @@ class Poisson:
         # PMF formula: (λ^k * e^(-λ)) / k!
         pmf = (lambtha ** k) * (e ** -lambtha) / fact
         return pmf
+
+    def cdf(self, k):
+        """
+        Calculates the value of the CDF for a given number of “successes”
+
+        Args:
+            k (int): number of “successes”
+
+        Returns:
+            CDF value for k
+        """
+        if k < 0:
+            return 0
+
+        k = int(k)
+        e = 2.7182818285
+        lambtha = self.lambtha
+        cdf = 0
+
+        for i in range(k + 1):
+            # Compute i!
+            fact = 1
+            for j in range(1, i + 1):
+                fact *= j
+            cdf += (lambtha ** i) * (e ** -lambtha) / fact
+
+        return cdf
