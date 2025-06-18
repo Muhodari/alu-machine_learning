@@ -12,17 +12,6 @@ class Binomial:
     def __init__(self, data=None, n=1, p=0.5):
         """
         Initializes the binomial distribution
-
-        Args:
-            data (list): list of observed data
-            n (int): number of trials (if no data)
-            p (float): probability of success (if no data)
-
-        Raises:
-            TypeError: if data is not a list
-            ValueError: if data has < 2 values,
-                        if n is not positive,
-                        if p is not in (0, 1)
         """
         if data is None:
             if not isinstance(n, int) or n < 1:
@@ -42,3 +31,38 @@ class Binomial:
             n_est = round(mean / p_est)
             self.n = n_est
             self.p = mean / self.n
+
+    def pmf(self, k):
+        """
+        Calculates the PMF for a given number of successes
+
+        Args:
+            k (int): number of successes
+
+        Returns:
+            float: PMF value for k
+        """
+        k = int(k)
+        if k < 0 or k > self.n:
+            return 0
+
+        return (self._factorial(self.n) /
+                (self._factorial(k) * self._factorial(self.n - k))) * \
+               (self.p ** k) * ((1 - self.p) ** (self.n - k))
+
+    def _factorial(self, num):
+        """
+        Calculates factorial of a number
+
+        Args:
+            num (int): the number
+
+        Returns:
+            int: factorial of num
+        """
+        if num == 0 or num == 1:
+            return 1
+        result = 1
+        for i in range(2, num + 1):
+            result *= i
+        return result
