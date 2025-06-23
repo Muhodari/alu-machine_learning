@@ -26,8 +26,7 @@ class MultiNormal:
         self.mean = np.mean(data, axis=1, keepdims=True)
         X_centered = data - self.mean
         self.cov = (X_centered @ X_centered.T) / (n - 1)
-
-        self.d = d  # store dimension for validation in pdf
+        self.d = d  # number of dimensions
 
     def pdf(self, x):
         """
@@ -43,14 +42,14 @@ class MultiNormal:
             raise TypeError("x must be a numpy.ndarray")
 
         if x.shape != (self.d, 1):
-            raise ValueError(f"x must have the shape ({self.d}, 1)")
+            raise ValueError("x must have the shape ({}, 1)".format(self.d))
 
         diff = x - self.mean
         inv_cov = np.linalg.inv(self.cov)
         det_cov = np.linalg.det(self.cov)
 
-        norm_const = 1.0 / (np.sqrt(((2 * np.pi) ** self.d) * det_cov))
+        denom = np.sqrt(((2 * np.pi) ** self.d) * det_cov)
         exponent = -0.5 * (diff.T @ inv_cov @ diff)
 
-        pdf_val = norm_const * np.exp(exponent).item()
+        pdf_val = (1.0 / denom) * np.exp(exponent).item()
         return pdf_val
