@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 import numpy as np
-from math import comb
+import math
+
+def factorial(n):
+    """Compute factorial safely for non-negative integers."""
+    return 1 if n == 0 else math.factorial(n)
 
 def likelihood(x, n, P):
     """
@@ -31,8 +35,10 @@ def likelihood(x, n, P):
     if np.any((P < 0) | (P > 1)):
         raise ValueError("All values in P must be in the range [0, 1]")
 
-    # Calculate binomial likelihood
-    comb_nx = comb(n, x)
+    # Binomial coefficient using factorial
+    comb_nx = factorial(n) / (factorial(x) * factorial(n - x))
+
+    # Compute likelihoods
     likelihoods = comb_nx * (P ** x) * ((1 - P) ** (n - x))
 
     return likelihoods
