@@ -1,5 +1,6 @@
 """
-This module provides a function to perform valid convolution on grayscale images.
+This module provides a function to perform valid convolution on grayscale
+images.
 """
 #!/usr/bin/env python3
 import numpy as np
@@ -8,8 +9,10 @@ import numpy as np
 def convolve_grayscale_valid(images, kernel):
     """
     Performs a valid convolution on grayscale images.
-    images: numpy.ndarray of shape (m, h, w) containing multiple grayscale images
-    kernel: numpy.ndarray of shape (kh, kw) containing the kernel for the convolution
+    images: numpy.ndarray of shape (m, h, w) containing multiple grayscale
+        images
+    kernel: numpy.ndarray of shape (kh, kw) containing the kernel for the
+        convolution
     Returns: numpy.ndarray containing the convolved images
     """
     m, h, w = images.shape
