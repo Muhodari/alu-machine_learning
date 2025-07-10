@@ -1,8 +1,8 @@
+#!/usr/bin/env python3
 """
 This module provides a function to perform valid convolution on grayscale
 images.
 """
-#!/usr/bin/env python3
 import numpy as np
 
 
