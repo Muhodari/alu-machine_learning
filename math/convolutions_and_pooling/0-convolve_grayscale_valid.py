@@ -5,7 +5,6 @@ images.
 #!/usr/bin/env python3
 import numpy as np
 
-# This module provides a function to perform valid convolution on grayscale images.
 
 def convolve_grayscale_valid(images, kernel):
     """
