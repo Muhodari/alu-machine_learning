@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-This module provides a function to perform same convolution on grayscale images.
+This module provides a function to perform same convolution on grayscale
+images.
 """
 import numpy as np
 
@@ -18,8 +19,9 @@ def convolve_grayscale_same(images, kernel):
     kh, kw = kernel.shape
     pad_h = (kh - 1) // 2 if kh % 2 == 1 else kh // 2
     pad_w = (kw - 1) // 2 if kw % 2 == 1 else kw // 2
-    padded = np.pad(images, ((0, 0), (pad_h, pad_h), (pad_w, pad_w)),
-                   mode='constant')
+    padded = np.pad(
+        images, ((0, 0), (pad_h, pad_h), (pad_w, pad_w)), mode='constant'
+    )
     output = np.zeros((m, h, w))
 
     for i in range(h):
