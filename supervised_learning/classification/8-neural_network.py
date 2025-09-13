@@ -24,11 +24,11 @@ class NeuralNetwork:
             ValueError: If nx or nodes is less than 1
         """
         # Consolidated validation - check both parameters at once
-        if not isinstance(nx, (int, float)) or not isinstance(nodes, (int, float)):
+        if not isinstance(nx, (int, float)) or not isinstance(
+                nodes, (int, float)):
             raise TypeError("nx and nodes must be numbers")
         if nx < 1 or nodes < 1:
             raise ValueError("nx and nodes must be positive numbers")
-        
         # Convert to integers if they are floats
         nx = int(nx)
         nodes = int(nodes)
