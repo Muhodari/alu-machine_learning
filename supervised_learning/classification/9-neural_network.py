@@ -20,19 +20,14 @@ class NeuralNetwork:
             nodes (int): Number of nodes in the hidden layer
 
         Raises:
-            TypeError: If nx is not an integer
-            ValueError: If nx is less than 1
-            TypeError: If nodes is not an integer
-            ValueError: If nodes is less than 1
+            TypeError: If nx or nodes is not an integer
+            ValueError: If nx or nodes is less than 1
         """
-        if not isinstance(nx, int):
-            raise TypeError("nx must be an integer")
-        if nx < 1:
-            raise ValueError("nx must be a positive integer")
-        if not isinstance(nodes, int):
-            raise TypeError("nodes must be an integer")
-        if nodes < 1:
-            raise ValueError("nodes must be a positive integer")
+        # Consolidated validation - check both parameters at once
+        if not isinstance(nx, int) or not isinstance(nodes, int):
+            raise TypeError("nx and nodes must be integers")
+        if nx < 1 or nodes < 1:
+            raise ValueError("nx and nodes must be positive integers")
 
         # Initialize private weights for hidden layer using random normal distribution
         self.__W1 = np.random.normal(0, 1, (nodes, nx))
