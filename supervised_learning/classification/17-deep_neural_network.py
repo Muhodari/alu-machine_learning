@@ -44,18 +44,31 @@ class DeepNeuralNetwork:
         self.__weights = {}
 
         # Initialize weights and biases for each layer
-        for l in range(1, self.__L + 1):
-            # Previous layer size
-            prev_layer = nx if l == 1 else layers[l - 2]
-            current_layer = layers[l - 1]
-
-            # Initialize weights using He et al. method
-            # He initialization: std = sqrt(2/prev_layer)
-            std = np.sqrt(2 / prev_layer)
-            self.__weights[f'W{l}'] = np.random.normal(0, std, (current_layer, prev_layer))
-
-            # Initialize biases to 0's
-            self.__weights[f'b{l}'] = np.zeros((current_layer, 1))
+        # Layer 1: input to first hidden layer
+        std1 = np.sqrt(2 / nx)
+        self.__weights['W1'] = np.random.normal(0, std1, (layers[0], nx))
+        self.__weights['b1'] = np.zeros((layers[0], 1))
+        
+        # Additional layers (up to 4 more layers supported)
+        if self.__L > 1:
+            std2 = np.sqrt(2 / layers[0])
+            self.__weights['W2'] = np.random.normal(0, std2, (layers[1], layers[0]))
+            self.__weights['b2'] = np.zeros((layers[1], 1))
+        
+        if self.__L > 2:
+            std3 = np.sqrt(2 / layers[1])
+            self.__weights['W3'] = np.random.normal(0, std3, (layers[2], layers[1]))
+            self.__weights['b3'] = np.zeros((layers[2], 1))
+        
+        if self.__L > 3:
+            std4 = np.sqrt(2 / layers[2])
+            self.__weights['W4'] = np.random.normal(0, std4, (layers[3], layers[2]))
+            self.__weights['b4'] = np.zeros((layers[3], 1))
+        
+        if self.__L > 4:
+            std5 = np.sqrt(2 / layers[3])
+            self.__weights['W5'] = np.random.normal(0, std5, (layers[4], layers[3]))
+            self.__weights['b5'] = np.zeros((layers[4], 1))
 
     @property
     def L(self):

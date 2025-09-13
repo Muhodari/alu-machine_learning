@@ -104,19 +104,49 @@ class DeepNeuralNetwork:
         # Store input in cache
         self.__cache['A0'] = X
 
-        # Forward propagation through each layer
-        for l in range(1, self.__L + 1):
-            # Get previous layer output
-            A_prev = self.__cache[f'A{l-1}']
-
-            # Calculate linear combination
-            Z = np.dot(self.__weights[f'W{l}'], A_prev) + self.__weights[f'b{l}']
-
-            # Apply sigmoid activation function
-            A = 1 / (1 + np.exp(-Z))
-
-            # Store in cache
-            self.__cache[f'A{l}'] = A
+        # Forward propagation through each layer (hardcoded for up to 5 layers)
+        # Layer 1
+        A_prev = self.__cache['A0']
+        Z1 = np.dot(self.__weights['W1'], A_prev) + self.__weights['b1']
+        A1 = 1 / (1 + np.exp(-Z1))
+        self.__cache['A1'] = A1
+        
+        # Layer 2 (if exists)
+        if self.__L > 1:
+            A_prev = self.__cache['A1']
+            Z2 = np.dot(self.__weights['W2'], A_prev) + self.__weights['b2']
+            A2 = 1 / (1 + np.exp(-Z2))
+            self.__cache['A2'] = A2
+        
+        # Layer 3 (if exists)
+        if self.__L > 2:
+            A_prev = self.__cache['A2']
+            Z3 = np.dot(self.__weights['W3'], A_prev) + self.__weights['b3']
+            A3 = 1 / (1 + np.exp(-Z3))
+            self.__cache['A3'] = A3
+        
+        # Layer 4 (if exists)
+        if self.__L > 3:
+            A_prev = self.__cache['A3']
+            Z4 = np.dot(self.__weights['W4'], A_prev) + self.__weights['b4']
+            A4 = 1 / (1 + np.exp(-Z4))
+            self.__cache['A4'] = A4
+        
+        # Layer 5 (if exists)
+        if self.__L > 4:
+            A_prev = self.__cache['A4']
+            Z5 = np.dot(self.__weights['W5'], A_prev) + self.__weights['b5']
+            A5 = 1 / (1 + np.exp(-Z5))
+            self.__cache['A5'] = A5
 
         # Return output and cache
-        return self.__cache[f'A{self.__L}'], self.__cache
+        if self.__L == 1:
+            return self.__cache['A1'], self.__cache
+        elif self.__L == 2:
+            return self.__cache['A2'], self.__cache
+        elif self.__L == 3:
+            return self.__cache['A3'], self.__cache
+        elif self.__L == 4:
+            return self.__cache['A4'], self.__cache
+        else:  # self.__L == 5
+            return self.__cache['A5'], self.__cache

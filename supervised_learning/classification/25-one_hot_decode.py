@@ -16,18 +16,16 @@ def one_hot_decode(one_hot):
     Returns:
         numpy.ndarray: Numeric labels with shape (m,), or None on failure
     """
+    # Validate input type and dimensions
     if not isinstance(one_hot, np.ndarray) or one_hot.ndim != 2:
         return None
     
-    # Check if one_hot contains only 0s and 1s
-    if not np.all((one_hot == 0) | (one_hot == 1)):
-        return None
-    
-    # Check if each column has exactly one 1
-    if not np.all(np.sum(one_hot, axis=0) == 1):
+    # Combined validation: check if one_hot contains only 0s and 1s
+    # and if each column has exactly one 1
+    if not (np.all((one_hot == 0) | (one_hot == 1)) and 
+            np.all(np.sum(one_hot, axis=0) == 1)):
         return None
     
     # Find the index of the maximum value in each column (argmax)
-    labels = np.argmax(one_hot, axis=0)
-    
-    return labels
+    # This is the most efficient way to decode one-hot encoding
+    return np.argmax(one_hot, axis=0)
