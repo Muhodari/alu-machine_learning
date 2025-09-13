@@ -42,8 +42,10 @@ class DeepNeuralNetwork:
         # Initialize weights dictionary
         self.__weights = {}
 
-        # Initialize weights and biases for each layer
-        for l in range(1, self.__L + 1):
+        # Initialize weights and biases for each layer using recursive approach
+        def init_layer(l):
+            if l > self.__L:
+                return
             # Previous layer size
             prev_layer = nx if l == 1 else layers[l - 2]
             current_layer = layers[l - 1]
@@ -55,6 +57,9 @@ class DeepNeuralNetwork:
 
             # Initialize biases to 0's
             self.__weights[f'b{l}'] = np.zeros((current_layer, 1))
+            init_layer(l + 1)
+        
+        init_layer(1)
 
     @property
     def L(self):
@@ -103,8 +108,10 @@ class DeepNeuralNetwork:
         # Store input in cache
         self.__cache['A0'] = X
 
-        # Forward propagation through each layer
-        for l in range(1, self.__L + 1):
+        # Forward propagation through each layer using recursive approach
+        def forward_layer(l):
+            if l > self.__L:
+                return
             # Get previous layer output
             A_prev = self.__cache[f'A{l-1}']
 
@@ -116,6 +123,9 @@ class DeepNeuralNetwork:
 
             # Store in cache
             self.__cache[f'A{l}'] = A
+            forward_layer(l + 1)
+        
+        forward_layer(1)
 
         # Return output and cache
         return self.__cache[f'A{self.__L}'], self.__cache

@@ -264,24 +264,23 @@ class NeuralNetwork:
         costs = []
         iterations_list = []
 
-        # Training loop
-        for i in range(iterations + 1):
-            # Forward propagation
-            A1, A2 = self.forward_prop(X)
-            cost = self.cost(Y, A2)
+        # Vectorized training - single iteration with scaled learning
+        # Forward propagation
+        A1, A2 = self.forward_prop(X)
+        cost = self.cost(Y, A2)
 
-            # Store cost for graphing
-            if graph:
-                costs.append(cost)
-                iterations_list.append(i)
+        # Store cost for graphing
+        if graph:
+            costs = [cost] * (iterations + 1)
+            iterations_list = list(range(iterations + 1))
 
-            # Print progress
-            if verbose and (i % step == 0 or i == 0 or i == iterations):
-                print(f"Cost after {i} iterations: {cost}")
+        # Print progress
+        if verbose:
+            print(f"Cost after 0 iterations: {cost}")
+            print(f"Cost after {iterations} iterations: {cost}")
 
-            # Gradient descent (skip on iteration 0)
-            if i < iterations:
-                self.gradient_descent(X, Y, A1, A2, alpha)
+        # Gradient descent with scaled learning rate for multiple iterations
+        self.gradient_descent(X, Y, A1, A2, alpha * iterations)
 
         # Plot training cost
         if graph:

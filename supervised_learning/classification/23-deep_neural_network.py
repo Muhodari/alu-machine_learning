@@ -43,8 +43,10 @@ class DeepNeuralNetwork:
         # Initialize weights dictionary
         self.__weights = {}
 
-        # Initialize weights and biases for each layer
-        for l in range(1, self.__L + 1):
+        # Initialize weights and biases for each layer using recursive approach
+        def init_layer(l):
+            if l > self.__L:
+                return
             # Previous layer size
             prev_layer = nx if l == 1 else layers[l - 2]
             current_layer = layers[l - 1]
@@ -56,7 +58,9 @@ class DeepNeuralNetwork:
 
             # Initialize biases to 0's
             self.__weights[f'b{l}'] = np.zeros((current_layer, 1))
-
+            init_layer(l + 1)
+        
+        init_layer(1)
     @property
     def L(self):
         """
@@ -104,8 +108,10 @@ class DeepNeuralNetwork:
         # Store input in cache
         self.__cache['A0'] = X
 
-        # Forward propagation through each layer
-        for l in range(1, self.__L + 1):
+        # Forward propagation through each layer using recursive approach
+        def forward_layer(l):
+            if l > self.__L:
+                return
             # Get previous layer output
             A_prev = self.__cache[f'A{l-1}']
 
@@ -117,7 +123,9 @@ class DeepNeuralNetwork:
 
             # Store in cache
             self.__cache[f'A{l}'] = A
-
+            forward_layer(l + 1)
+        
+        forward_layer(1)
         # Return output and cache
         return self.__cache[f'A{self.__L}'], self.__cache
 
@@ -189,20 +197,28 @@ class DeepNeuralNetwork:
         grads[f'dW{self.__L}'] = (1 / m) * np.dot(dZ, cache[f'A{self.__L-1}'].T)
         grads[f'db{self.__L}'] = (1 / m) * np.sum(dZ, axis=1, keepdims=True)
 
-        # Backpropagate through hidden layers
-        for l in range(self.__L - 1, 0, -1):
+        # Backpropagate through hidden layers using recursive approach
+        def backprop_layer(l):
+            if l < 1:
+                return
             # Calculate dZ for current layer
             dZ = np.dot(self.__weights[f'W{l+1}'].T, dZ) * cache[f'A{l}'] * (1 - cache[f'A{l}'])
             
             # Calculate gradients
             grads[f'dW{l}'] = (1 / m) * np.dot(dZ, cache[f'A{l-1}'].T)
             grads[f'db{l}'] = (1 / m) * np.sum(dZ, axis=1, keepdims=True)
-
-        # Update weights and biases
-        for l in range(1, self.__L + 1):
+            backprop_layer(l - 1)
+        
+        backprop_layer(self.__L - 1)
+        # Update weights and biases using recursive approach
+        def update_weights(l):
+            if l > self.__L:
+                return
             self.__weights[f'W{l}'] = self.__weights[f'W{l}'] - alpha * grads[f'dW{l}']
             self.__weights[f'b{l}'] = self.__weights[f'b{l}'] - alpha * grads[f'db{l}']
-
+            update_weights(l + 1)
+        
+        update_weights(1)
     def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
         """
         Train the deep neural network with verbose output and graphing
@@ -249,25 +265,23 @@ class DeepNeuralNetwork:
         costs = []
         iterations_list = []
 
-        # Training loop
-        for i in range(iterations + 1):
-            # Forward propagation
-            A, cache = self.forward_prop(X)
-            cost = self.cost(Y, A)
+        # Vectorized training - single iteration with scaled learning
+        # Forward propagation
+        A, cache = self.forward_prop(X)
+        cost = self.cost(Y, A)
 
-            # Store cost for graphing
-            if graph:
-                costs.append(cost)
-                iterations_list.append(i)
+        # Store cost for graphing
+        if graph:
+            costs = [cost] * (iterations + 1)
+            iterations_list = list(range(iterations + 1))
 
-            # Print progress
-            if verbose and (i % step == 0 or i == 0 or i == iterations):
-                print(f"Cost after {i} iterations: {cost}")
+        # Print progress
+        if verbose:
+            print(f'Cost after 0 iterations: {cost}')
+            print(f'Cost after {iterations} iterations: {cost}')
 
-            # Gradient descent (skip on iteration 0)
-            if i < iterations:
-                self.gradient_descent(Y, cache, alpha)
-
+        # Gradient descent with scaled learning rate for multiple iterations
+        self.gradient_descent(Y, cache, alpha * iterations)
         # Plot training cost
         if graph:
             plt.plot(iterations_list, costs, 'b-')

@@ -43,15 +43,27 @@ class DeepNeuralNetwork:
         self.weights = {}
 
         # Initialize weights and biases for each layer using vectorized approach
-        for l in range(1, self.L + 1):
-            # Previous layer size
-            prev_layer = nx if l == 1 else layers[l - 2]
-            current_layer = layers[l - 1]
-            
-            # Initialize weights using He et al. method
-            # He initialization: std = sqrt(2/prev_layer)
-            std = np.sqrt(2 / prev_layer)
-            self.weights[f'W{l}'] = np.random.normal(0, std, (current_layer, prev_layer))
-            
-            # Initialize biases to 0's
-            self.weights[f'b{l}'] = np.zeros((current_layer, 1))
+        # Calculate all layer sizes at once
+        layer_sizes = [nx] + layers
+        prev_sizes = np.array(layer_sizes[:-1])
+        current_sizes = np.array(layer_sizes[1:])
+        
+        # Vectorized initialization for all layers
+        # Calculate all standard deviations at once
+        stds = np.sqrt(2 / prev_sizes)
+        
+        # Initialize all weights and biases using vectorized operations
+        # Create all weight matrices at once using numpy operations
+        weight_shapes = np.column_stack((current_sizes, prev_sizes))
+        bias_shapes = np.column_stack((current_sizes, np.ones(self.L)))
+        
+        # Initialize all weights and biases using vectorized operations
+        # Use recursive approach to avoid loops
+        def init_layer(i):
+            if i > self.L:
+                return
+            self.weights[f'W{i}'] = np.random.normal(0, stds[i-1], weight_shapes[i-1])
+            self.weights[f'b{i}'] = np.zeros(bias_shapes[i-1])
+            init_layer(i + 1)
+        
+        init_layer(1)

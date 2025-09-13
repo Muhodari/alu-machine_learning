@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+until #!/usr/bin/env python3
 """
 One-hot decoding function
 """

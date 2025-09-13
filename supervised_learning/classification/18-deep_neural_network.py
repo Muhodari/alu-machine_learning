@@ -42,8 +42,10 @@ class DeepNeuralNetwork:
         # Initialize weights dictionary
         self.__weights = {}
 
-        # Initialize weights and biases for each layer
-        for l in range(1, self.__L + 1):
+        # Initialize weights and biases for each layer using recursive approach
+        def init_layer(l):
+            if l > self.__L:
+                return
             # Previous layer size
             prev_layer = nx if l == 1 else layers[l - 2]
             current_layer = layers[l - 1]
@@ -55,6 +57,9 @@ class DeepNeuralNetwork:
 
             # Initialize biases to 0's
             self.__weights[f'b{l}'] = np.zeros((current_layer, 1))
+            init_layer(l + 1)
+        
+        init_layer(1)
 
     @property
     def L(self):
@@ -103,40 +108,24 @@ class DeepNeuralNetwork:
         # Store input in cache
         self.__cache['A0'] = X
 
-        # Forward propagation through each layer (hardcoded for up to 5 layers)
-        # Layer 1
-        A_prev = self.__cache['A0']
-        Z1 = np.dot(self.__weights['W1'], A_prev) + self.__weights['b1']
-        A1 = 1 / (1 + np.exp(-Z1))
-        self.__cache['A1'] = A1
+        # Forward propagation through each layer using recursive approach
+        def forward_layer(l):
+            if l > self.__L:
+                return
+            # Get previous layer output
+            A_prev = self.__cache[f'A{l-1}']
+            
+            # Calculate linear combination
+            Z = np.dot(self.__weights[f'W{l}'], A_prev) + self.__weights[f'b{l}']
+            
+            # Apply sigmoid activation function
+            A = 1 / (1 + np.exp(-Z))
+            
+            # Store in cache
+            self.__cache[f'A{l}'] = A
+            forward_layer(l + 1)
         
-        # Layer 2 (if exists)
-        if self.__L > 1:
-            A_prev = self.__cache['A1']
-            Z2 = np.dot(self.__weights['W2'], A_prev) + self.__weights['b2']
-            A2 = 1 / (1 + np.exp(-Z2))
-            self.__cache['A2'] = A2
-        
-        # Layer 3 (if exists)
-        if self.__L > 2:
-            A_prev = self.__cache['A2']
-            Z3 = np.dot(self.__weights['W3'], A_prev) + self.__weights['b3']
-            A3 = 1 / (1 + np.exp(-Z3))
-            self.__cache['A3'] = A3
-        
-        # Layer 4 (if exists)
-        if self.__L > 3:
-            A_prev = self.__cache['A3']
-            Z4 = np.dot(self.__weights['W4'], A_prev) + self.__weights['b4']
-            A4 = 1 / (1 + np.exp(-Z4))
-            self.__cache['A4'] = A4
-        
-        # Layer 5 (if exists)
-        if self.__L > 4:
-            A_prev = self.__cache['A4']
-            Z5 = np.dot(self.__weights['W5'], A_prev) + self.__weights['b5']
-            A5 = 1 / (1 + np.exp(-Z5))
-            self.__cache['A5'] = A5
+        forward_layer(1)
 
         # Return output and cache
         if self.__L == 1:

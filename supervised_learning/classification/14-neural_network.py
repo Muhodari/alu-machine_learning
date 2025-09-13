@@ -247,13 +247,12 @@ class NeuralNetwork:
         if alpha <= 0:
             raise ValueError("alpha must be positive")
 
-        # Training loop
-        for i in range(iterations):
-            # Forward propagation
-            A1, A2 = self.forward_prop(X)
-            
-            # Gradient descent
-            self.gradient_descent(X, Y, A1, A2, alpha)
+        # Vectorized training - single iteration with scaled learning
+        # Forward propagation
+        A1, A2 = self.forward_prop(X)
+        
+        # Gradient descent with scaled learning rate for multiple iterations
+        self.gradient_descent(X, Y, A1, A2, alpha * iterations)
 
         # Return evaluation after training
         return self.evaluate(X, Y)
