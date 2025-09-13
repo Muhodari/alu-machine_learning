@@ -29,6 +29,7 @@ class NeuralNetwork:
             raise TypeError("nx and nodes must be numbers")
         if nx < 1 or nodes < 1:
             raise ValueError("nx and nodes must be positive numbers")
+        
         # Convert to integers if they are floats
         nx = int(nx)
         nodes = int(nodes)
