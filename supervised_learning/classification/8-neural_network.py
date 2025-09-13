@@ -1,48 +1,22 @@
 #!/usr/bin/env python3
-"""
-NeuralNetwork class for binary classification with one hidden layer
-"""
 
 import numpy as np
 
+NN = __import__('8-neural_network').NeuralNetwork
 
-class NeuralNetwork:
-    """
-    A neural network with one hidden layer performing binary classification
-    """
+lib_train = np.load('../data/Binary_Train.npz')
+X_3D, Y = lib_train['X'], lib_train['Y']
+X = X_3D.reshape((X_3D.shape[0], -1)).T
 
-    def __init__(self, nx, nodes):
-        """
-        Initialize a neural network
-
-        Args:
-            nx (int): Number of input features
-            nodes (int): Number of nodes in the hidden layer
-
-        Raises:
-            TypeError: If nx or nodes is not an integer
-            ValueError: If nx or nodes is less than 1
-        """
-        # Consolidated validation - check both parameters at once
-        if not isinstance(nx, int) or not isinstance(nodes, int):
-            raise TypeError("nx and nodes must be integers")
-        if nx < 1 or nodes < 1:
-            raise ValueError("nx and nodes must be positive integers")
-
-        # Initialize weights for hidden layer using random normal distribution
-        self.W1 = np.random.normal(0, 1, (nodes, nx))
-
-        # Initialize bias for hidden layer with zeros
-        self.b1 = np.zeros((nodes, 1))
-
-        # Initialize activated output for hidden layer
-        self.A1 = 0
-
-        # Initialize weights for output neuron using random normal distribution
-        self.W2 = np.random.normal(0, 1, (1, nodes))
-
-        # Initialize bias for output neuron
-        self.b2 = 0
-
-        # Initialize activated output for output neuron
-        self.A2 = 0
+np.random.seed(0)
+nn = NN(X.shape[0], 3)
+print(nn.W1)
+print(nn.W1.shape)
+print(nn.b1)
+print(nn.W2)
+print(nn.W2.shape)
+print(nn.b2)
+print(nn.A1)
+print(nn.A2)
+nn.A1 = 10
+print(nn.A1)
